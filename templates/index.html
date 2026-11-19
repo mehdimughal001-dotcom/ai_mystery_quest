@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Mystery Quest | Interactive Detective Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="navbar">
+        <div class="brand">
+            <span class="badge-icon">🕵️</span>
+            <h1>AI MYSTERY QUEST</h1>
+            {% if demo_mode %}
+                <span class="mode-badge demo">DEMO MODE</span>
+            {% else %}
+                <span class="mode-badge live">GROQ AI LIVE</span>
+            {% endif %}
+        </div>
+        <div class="stats-bar">
+            <div class="stat-item">Score: <strong id="scoreDisplay">0</strong></div>
+            <div class="stat-item">Cases Solved: <strong id="solvedDisplay">0</strong></div>
+            <div class="stat-item">Hints Used: <strong id="hintsUsedDisplay">0</strong></div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Case Generator Controls -->
+        <section class="control-panel card">
+            <div class="controls-row">
+                <div class="control-group">
+                    <label for="themeSelect">Case Theme</label>
+                    <select id="themeSelect">
+                        <option value="Classic Noir">Classic Noir</option>
+                        <option value="Cyberpunk Heist">Cyberpunk Heist</option>
+                        <option value="Victorian Mansion">Victorian Mansion</option>
+                        <option value="Corporate Espionage">Corporate Espionage</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="difficultySelect">Difficulty</label>
+                    <select id="difficultySelect">
+                        <option value="Easy">Easy</option>
+                        <option value="Medium" selected>Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+                </div>
+                <button id="newCaseBtn" class="btn primary-btn">🔍 Generate New Case</button>
+            </div>
+        </section>
+
+        <!-- Loading Indicator -->
+        <div id="loader" class="loader hidden">
+            <div class="spinner"></div>
+            <p>Decrypting case files and interviewing witnesses...</p>
+        </div>
+
+        <!-- Main Investigation Board -->
+        <div id="gameBoard" class="game-grid hidden">
+            <!-- Left Column: Case File, Suspects, Evidence -->
+            <div class="left-column">
+                <section class="card case-brief">
+                    <div class="case-header">
+                        <h2 id="caseTitle">Case Title</h2>
+                        <span id="caseStatusBadge" class="status-pill active">ACTIVE INVESTIGATION</span>
+                    </div>
+                    <p class="setting-text"><strong>Location & Time:</strong> <span id="caseSetting"></span></p>
+                    <p id="caseSummary" class="summary-text"></p>
+                </section>
+
+                <section class="card">
+                    <h3>👤 Persons of Interest (Suspects)</h3>
+                    <div id="suspectsList" class="suspects-grid"></div>
+                </section>
+
+                <section class="card">
+                    <h3>🗂️ Collected Evidence</h3>
+                    <ul id="evidenceList" class="evidence-list"></ul>
+                </section>
+            </div>
+
+            <!-- Right Column: Puzzle, AI Hints, Detective Chat, Submission -->
+            <div class="right-column">
+                <section class="card puzzle-card">
+                    <h3>🧩 Forensic Puzzle</h3>
+                    <p id="puzzleQuestion" class="puzzle-text"></p>
+                    <div class="hint-controls">
+                        <button id="getHintBtn" class="btn secondary-btn">💡 Request AI Hint (-15 pts)</button>
+                    </div>
+                    <div id="hintsContainer" class="hints-box"></div>
+                </section>
+
+                <section class="card chat-card">
+                    <h3>🤖 Ask Detective AI</h3>
+                    <div id="chatWindow" class="chat-window">
+                        <div class="chat-msg ai">Partner online. Ask me about alibis, clues, or contradictions.</div>
+                    </div>
+                    <form id="chatForm" class="chat-input-row">
+                        <input type="text" id="chatInput" placeholder="Ask Detective AI a question..." required>
+                        <button type="submit" class="btn secondary-btn">Ask</button>
+                    </form>
+                </section>
+
+                <section class="card solve-card">
+                    <h3>⚖️ Accuse & Close Case</h3>
+                    <form id="solveForm">
+                        <label for="suspectSelect">Select Primary Suspect:</label>
+                        <select id="suspectSelect" required></select>
+
+                        <label for="puzzleInput">Enter Puzzle Solution:</label>
+                        <input type="text" id="puzzleInput" placeholder="Type your decoded answer..." required>
+
+                        <button type="submit" class="btn solve-btn">Submit Final Verdict</button>
+                    </form>
+                    <div id="feedbackBanner" class="feedback-banner hidden"></div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Case History Section -->
+        <section class="card history-section">
+            <h3>📜 Detective Case History</h3>
+            <div id="historyList" class="history-list">
+                <p class="muted">No cases completed yet. Generate a case to begin your career.</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
